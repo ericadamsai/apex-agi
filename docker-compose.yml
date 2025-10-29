@@ -1,0 +1,68 @@
+# Docker Compose for Apex AGI - ericadamsai watermark
+version: '3.8'
+
+services:
+  apex-server:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      RUST_LOG: info
+      DATABASE_URL: postgres://apex:apex@postgres:5432/apex_agi
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - apex-network
+    labels:
+      - "com.ericadamsai.app=apex-agi"
+      - "com.ericadamsai.version=0.1.0"
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: apex
+      POSTGRES_PASSWORD: apex
+      POSTGRES_DB: apex_agi
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - apex-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U apex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - apex-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - apex-network
+
+volumes:
+  postgres-data:
+  redis-data:
+  prometheus-data:
+
+networks:
+  apex-network:
+    driver: bridge
