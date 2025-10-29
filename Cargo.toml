@@ -1,0 +1,59 @@
+[workspace]
+members = [
+  "apex_core",
+  "apex_server",
+  "apex_ws",
+  "apex_grpc",
+  "apex_cli",
+  "apex_py",
+]
+resolver = "2"
+
+[workspace.package]
+authors = ["Apex AGI <ops@apex-agi.io>"]
+license = "Apache-2.0"
+edition = "2021"
+homepage = "https://github.com/ericadamsai/apex-agi"
+repository = "https://github.com/ericadamsai/apex-agi"
+description = "Apex AGI: production-grade AGI orchestration engine. Watermark: ericadamsai"
+
+[workspace.dependencies]
+anyhow = "1"
+thiserror = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ton = { version = "0.8", package = "toml" }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+axum = { version = "0.7", features = ["macros", "json"] }
+tokio = { version = "1", features = ["full"] }
+prost = "0.13"
+tonic = { version = "0.12", features = ["transport"] }
+bytes = "1"
+reqwest = { version = "0.12", features = ["json", "gzip", "brotli", "deflate"] }
+serde_yaml = "0.9"
+parking_lot = "0.12"
+dashmap = "6"
+petgraph = "0.6"
+rand = "0.8"
+statrs = "0.16"
+# Persistence
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "migrate", "uuid", "chrono"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+redis = { version = "0.25", features = ["tokio-comp", "aio", "json"] }
+heed = "0.20" # LMDB wrapper
+rmp-serde = "1"
+# Observability
+opentelemetry = { version = "0.25", features = ["rt-tokio"] }
+opentelemetry-otlp = { version = "0.25", features = ["tls"] }
+tracing-opentelemetry = "0.25"
+metrics = "0.23"
+metrics-exporter-prometheus = "0.15"
+# Security
+ring = "0.17"
+argon2 = "0.5"
+base64 = "0.22"
+
+[workspace.metadata]
+watermark = "ericadamsai"
